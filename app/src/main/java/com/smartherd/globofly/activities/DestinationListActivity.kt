@@ -13,7 +13,6 @@ import com.smartherd.globofly.helpers.SampleData
 import com.smartherd.globofly.models.Destination
 import com.smartherd.globofly.services.DestinationService
 import com.smartherd.globofly.services.ServiceBuilder
-import com.smartherd.globofly.services.ServiceBuilderTest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -42,37 +41,36 @@ class DestinationListActivity : AppCompatActivity() {
 
 	override fun onResume() {
 		super.onResume()
-
 		loadDestinations()
 	}
 
 	private fun loadDestinations() {
-
-        // To be replaced by retrofit code
-		// destinyRecyclerView.adapter = DestinationAdapter(SampleData.DESTINATIONS)
-
-		/**
-		 * retrofit code
-		 */
-		val destinationService = ServiceBuilderTest.buildService(DestinationService::class.java)
-		println("------------------------------------------------------------------destinationService : " + destinationService)
+//		don't remove the comment
+//		destinyRecyclerView.adapter = DestinationAdapter(SampleData.DESTINATIONS)
+		val destinationService = ServiceBuilder.buildService(DestinationService::class.java)
 		val requestCall = destinationService.getDestinationList()
-		println("------------------------------------------------------------------requestCall : " + requestCall)
 
-		requestCall.enqueue(object: Callback<List<Destination>> {
+		requestCall.enqueue(object : Callback<List<Destination>> {
 			override fun onResponse(call: Call<List<Destination>>, response: Response<List<Destination>>) {
 				if (response.isSuccessful) {
-					val destinationList: List<Destination> = response.body()!!
- 					destinyRecyclerView.adapter = DestinationAdapter(destinationList)
-				}
-				else {
-					Toast.makeText(this@DestinationListActivity, "Status code : "+ response.code(), Toast.LENGTH_LONG).show()
+					val destinationList: List<Destination>? = response.body()
+					if (destinationList != null) {
+						destinyRecyclerView.adapter = DestinationAdapter(destinationList)
+					} else {
+						Toast.makeText(this@DestinationListActivity, "Empty Response!", Toast.LENGTH_LONG).show()
+					}
+				} else {
+					Toast.makeText(this@DestinationListActivity, "Status code : " + response.code(), Toast.LENGTH_LONG).show()
 				}
 			}
 
 			override fun onFailure(call: Call<List<Destination>>, t: Throwable) {
-				Toast.makeText(this@DestinationListActivity, "in onFailure", Toast.LENGTH_LONG).show()
+				Toast.makeText(this@DestinationListActivity, "Failed to fetch data!", Toast.LENGTH_LONG).show()
+				t.printStackTrace() // Print the complete error message in Logcat
+
+				// Print call: Call<List<Destination>> information
+				println("Failed call: $call")
 			}
 		})
-    }
+	}
 }

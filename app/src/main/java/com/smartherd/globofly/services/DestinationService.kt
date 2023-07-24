@@ -5,6 +5,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface DestinationService {
-    @GET ("destination")
+//    @GET ("destination")
+    @GET("b/4AGW")
     fun getDestinationList(): Call<List<Destination>>
 }
