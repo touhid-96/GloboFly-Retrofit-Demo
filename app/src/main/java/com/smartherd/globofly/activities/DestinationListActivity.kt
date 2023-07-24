@@ -9,11 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.smartherd.globofly.R
 import com.smartherd.globofly.helpers.DestinationAdapter
-import com.smartherd.globofly.helpers.SampleData
 import com.smartherd.globofly.models.Destination
 import com.smartherd.globofly.services.DestinationService
 import com.smartherd.globofly.services.ServiceBuilder
-import com.smartherd.globofly.services.ServiceBuilderTest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -54,10 +52,8 @@ class DestinationListActivity : AppCompatActivity() {
 		/**
 		 * retrofit code
 		 */
-		val destinationService = ServiceBuilderTest.buildService(DestinationService::class.java)
-		println("------------------------------------------------------------------destinationService : " + destinationService)
+		val destinationService = ServiceBuilder.buildService(DestinationService::class.java)
 		val requestCall = destinationService.getDestinationList()
-		println("------------------------------------------------------------------requestCall : " + requestCall)
 
 		requestCall.enqueue(object: Callback<List<Destination>> {
 			override fun onResponse(call: Call<List<Destination>>, response: Response<List<Destination>>) {
