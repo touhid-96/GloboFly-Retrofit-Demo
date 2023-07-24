@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 
 object ServiceBuilderTest {
-    private var BASE_URL  = "https://10.0.2.2:9000/"
+    private var BASE_URL  = "http://10.0.2.2:9000/"
 
     private val client = OkHttpClient.Builder()
 

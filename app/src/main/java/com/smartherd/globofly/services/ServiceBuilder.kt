@@ -11,7 +11,8 @@ import javax.net.ssl.X509TrustManager
 
 object ServiceBuilder {
     //    private var BASE_URL = "http://192.168.50.141:9000/"
-    private var BASE_URL = "https://jsonkeeper.com/"
+    // private var BASE_URL = "https://jsonkeeper.com/"
+    private var BASE_URL = "http://10.0.2.2:9000/"
 
     // custom setter for BASE_URL
     fun setBaseURL(url: String) {

@@ -13,6 +13,7 @@ import com.smartherd.globofly.helpers.SampleData
 import com.smartherd.globofly.models.Destination
 import com.smartherd.globofly.services.DestinationService
 import com.smartherd.globofly.services.ServiceBuilder
+import com.smartherd.globofly.services.ServiceBuilderTest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -47,7 +48,7 @@ class DestinationListActivity : AppCompatActivity() {
 	private fun loadDestinations() {
 //		don't remove the comment
 //		destinyRecyclerView.adapter = DestinationAdapter(SampleData.DESTINATIONS)
-		val destinationService = ServiceBuilder.buildService(DestinationService::class.java)
+		val destinationService = ServiceBuilderTest.buildService(DestinationService::class.java)
 		val requestCall = destinationService.getDestinationList()
 
 		requestCall.enqueue(object : Callback<List<Destination>> {
