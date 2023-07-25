@@ -3,6 +3,7 @@ package com.smartherd.globofly.services
 import com.smartherd.globofly.models.Destination
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -32,4 +33,11 @@ interface DestinationService {
         @Field("country") country: String,
         @Field("description") description: String
     ): Call<Destination>
+
+    /**
+     * Unit (Kotlin) = Void (Java)
+     * We don't need the deleted object to be returned by response
+     */
+    @DELETE ("destination/{id}")
+    fun deleteDestination(@Path("id") id: Int): Call<Unit>
 }
