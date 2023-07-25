@@ -108,15 +108,40 @@ class DestinationDetailActivity : AppCompatActivity() {
 			val description = description.text.toString()
 			val country = countryName.text.toString()
 
-            // To be replaced by retrofit code
-            val destination = Destination()
+			/**
+			 * offline
+			 */
+			/*val destination = Destination()
             destination.id = id
             destination.city = city
             destination.description = description
             destination.country = country
 
             SampleData.updateDestination(destination);
-            finish() // Move back to DestinationListActivity
+            finish() // Move back to DestinationListActivity*/
+
+			/**
+			 * retrofit code
+			 */
+			val destinationService = ServiceBuilder.buildService(DestinationService::class.java)
+			val requestCall = destinationService.updateDestination(id, city, country, description)
+
+			requestCall.enqueue(object: Callback<Destination> {
+				override fun onResponse(call: Call<Destination>, response: Response<Destination>) {
+					if (response.isSuccessful) {
+						// var updatedDestination = response.body()  //this response contains updated detail also. Can be used if needed.
+						finish()
+						Toast.makeText(this@DestinationDetailActivity, "Updated!", Toast.LENGTH_SHORT).show()
+					}
+					else {
+						Toast.makeText(this@DestinationDetailActivity, "Failed!", Toast.LENGTH_LONG).show()
+					}
+				}
+
+				override fun onFailure(call: Call<Destination>, t: Throwable) {
+					Toast.makeText(this@DestinationDetailActivity, "requestCall error : " + t.message, Toast.LENGTH_LONG).show()
+				}
+			})
 		}
 	}
 
