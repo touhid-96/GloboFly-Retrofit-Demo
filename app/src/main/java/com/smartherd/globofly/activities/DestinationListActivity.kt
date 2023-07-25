@@ -52,8 +52,12 @@ class DestinationListActivity : AppCompatActivity() {
 		/**
 		 * retrofit code
 		 */
+		val filter = HashMap<String, String>()
+		// filter["country"] = "India"
+		// filter["count"] = "1"
+
 		val destinationService = ServiceBuilder.buildService(DestinationService::class.java)
-		val requestCall = destinationService.getDestinationList()
+		val requestCall = destinationService.getDestinationList(filter)
 
 		requestCall.enqueue(object: Callback<List<Destination>> {
 			override fun onResponse(call: Call<List<Destination>>, response: Response<List<Destination>>) {
@@ -62,12 +66,12 @@ class DestinationListActivity : AppCompatActivity() {
  					destinyRecyclerView.adapter = DestinationAdapter(destinationList)
 				}
 				else {
-					Toast.makeText(this@DestinationListActivity, "Status code : "+ response.code(), Toast.LENGTH_LONG).show()
+					Toast.makeText(this@DestinationListActivity, "Failed to retrieve items. Status code : "+ response.code(), Toast.LENGTH_LONG).show()
 				}
 			}
 
 			override fun onFailure(call: Call<List<Destination>>, t: Throwable) {
-				Toast.makeText(this@DestinationListActivity, "in onFailure", Toast.LENGTH_LONG).show()
+				Toast.makeText(this@DestinationListActivity, "requestCall error : " + t.message, Toast.LENGTH_LONG).show()
 			}
 		})
     }

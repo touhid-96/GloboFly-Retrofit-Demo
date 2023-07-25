@@ -1,6 +1,7 @@
 package com.smartherd.globofly.services
 
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -11,6 +12,7 @@ object ServiceBuilder {
      * this URL must be changed to the server URL, such as "https://xyz.com"
      */
     private var BASE_URL  = "http://10.0.2.2:9000/"
+    private val logger = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
 
     // custom setter for BASE_URL
     fun setBaseURL(url: String) {
@@ -18,7 +20,7 @@ object ServiceBuilder {
     }
 
     // Creating OkHttp Client
-    private val okHTTP = OkHttpClient.Builder()
+    private val okHTTP = OkHttpClient.Builder().addInterceptor(logger)
 
     // Creating Retrofit Builder
     private val builder = Retrofit.Builder()

@@ -5,12 +5,18 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.smartherd.globofly.R
 import com.smartherd.globofly.helpers.SampleData
 import com.smartherd.globofly.models.Destination
+import com.smartherd.globofly.services.DestinationService
+import com.smartherd.globofly.services.ServiceBuilder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class DestinationDetailActivity : AppCompatActivity() {
 
@@ -55,7 +61,7 @@ class DestinationDetailActivity : AppCompatActivity() {
 	private fun loadDetails(id: Int) {
 
 		// To be replaced by retrofit code
-		val destination = SampleData.getDestinationById(id)
+		/*val destination = SampleData.getDestinationById(id)
 
 		destination?.let {
 			cityName.setText(destination.city)
@@ -63,7 +69,35 @@ class DestinationDetailActivity : AppCompatActivity() {
 			countryName.setText(destination.country)
 
 			collapsingToolbar.title = destination.city
-		}
+		}*/
+
+		/**
+		 * retrofit code
+		 */
+		val destinationService = ServiceBuilder.buildService(DestinationService::class.java)
+		val requestCall = destinationService.getDestination(id)
+
+		requestCall.enqueue(object: Callback<Destination> {
+			override fun onResponse(call: Call<Destination>, response: Response<Destination>) {
+				if (response.isSuccessful) {
+					val destination = response.body()
+					destination?.let {
+						cityName.setText(destination.city)
+						description.setText(destination.description)
+						countryName.setText(destination.country)
+
+						collapsingToolbar.title = destination.city
+					}
+				}
+				else {
+					Toast.makeText(this@DestinationDetailActivity, "Failed to retrieve details. Status code : " + response.code(), Toast.LENGTH_LONG).show()
+				}
+			}
+
+			override fun onFailure(call: Call<Destination>, t: Throwable) {
+				Toast.makeText(this@DestinationDetailActivity, "requestCall error : " + t.message, Toast.LENGTH_LONG).show()
+			}
+		})
 	}
 
 	private fun initUpdateButton(id: Int) {
